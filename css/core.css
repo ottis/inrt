@@ -1,0 +1,9 @@
+#viewport
+{
+  width: 400px;
+  height: 400px;
+  border: 10px solid #dadada;
+  margin: 50px auto;
+  overflow: hidden;
+  cursor: move;
+}
