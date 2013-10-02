@@ -171,6 +171,11 @@ hr {
   margin:0 0 20px;
 }
 
+img
+{
+  max-width: 100%;
+}
+
 footer {
   bottom:50px;
   float: right;
