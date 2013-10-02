@@ -41,6 +41,8 @@ inrt.scroller.prototype.onMouseDown = function(e)
     this.startX = e.clientX;
     this.startY = e.clientY;
 
+    this.velocity = {x: 0, y: 0};
+
     this.offsetX = this.el.scrollLeft;
     this.offsetY = this.el.scrollTop;
 
