@@ -7,31 +7,34 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script type="text/javascript" src="javascripts/inrt.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Anaheim' rel='stylesheet' type='text/css'>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
   <body>
+    <div class="bar">inrt.js
+
+      <a href="https://github.com/ottis/inrt" target="_blank" class="fork">
+        <img src="images/octocat.png"/>
+        <span> Fork me on Github!
+      </a>
+    </div>
     <div class="wrapper">
-      <header>
-        <h1>Inrt</h1>
-        <p>inrt.js is a lightweight and simple class that gives you the ability to apply inertial scrolling a container</p>
-
-        <p class="view"><a href="https://github.com/ottis/inrt">View the Project on GitHub <small>ottis/inrt</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/ottis/inrt/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/ottis/inrt/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/ottis/inrt">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
       <section>
         <h1>
 <a name="inrtjs" class="anchor" href="#inrtjs"><span class="octicon octicon-link"></span></a>inrt.js</h1>
 
 <p>inrt.js is a lightweight and simple class that gives you the ability to apply inertial scrolling a container. I wanted to create a inertial wrapper class that didn't require the use of external libraries such as jQuery.</p>
+
+<h2>
+<a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Demo</h2>
+
+<div id="viewport">
+  <img src="https://raw.github.com/ottis/inrt/master/images/large.png"/>
+</div>
 
 <h2>
 <a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic Usage</h2>
@@ -50,13 +53,27 @@
   new inrt.scroller({elementId: "viewport"});
 &lt;/script&gt;
 </code></pre>
+
+<h2>
+<a name="options" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<p>inrt.js comes with some configurable options, so you can tweak them to suit your needs. These are as follows:</p>
+
+<ul>
+  <li>invertMovement [defaults to false]</li>
+  <li>defaultDrag [defaults to 0.9] - how fast the control will come to a stop (lower = longer)</li>
+  <li>maxScrollSpeed [defaults to 40] - the max speed the control can travel in either direction</li>
+<ul>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/ottis">ottis</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme made by <a href="https://github.com/orderedlist">orderedlist</a> X <a href="https://github.com/ottis">ottis</a></small></p>
+        <small>Images are copyright © of their respective owners</small>
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
+    <script type="text/javascript">
+      new inrt.scroller({elementId:"viewport"});
+    </script>
   </body>
 </html>
