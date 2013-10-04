@@ -18,6 +18,12 @@ inrt.js is very easy to add to your page, below shows the basics.
       new inrt.scroller({elementId: "viewport"});
     </script>
     
+Once added to your page, set the width/height of your viewport and add
+
+    overflow: hidden / scroll
+    
+inrt.js supports native scrollbars, and will update them relative to the movement
+    
 ### Options
 
 inrt.js comes with some configurable options, so you can tweak them to suit your needs. These are as follows:
