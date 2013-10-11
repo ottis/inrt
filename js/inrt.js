@@ -20,6 +20,9 @@ inrt.scroller = function(cfg)
   this.maxScrollSpeed = cfg.maxScrollSpeed || 40;
 
   this.el.onmousedown = delegate(this, this.onMouseDown);
+
+  // touch device support
+  this.el.addEventListener("touchstart", delegate(this, this.onTouchStart));
 };
 
 //
@@ -38,13 +41,7 @@ inrt.scroller.prototype.onMouseDown = function(e)
 
   if(e.button == 1 && window.event != null || e.button == 0)
   {
-    this.startX = e.clientX;
-    this.startY = e.clientY;
-
-    this.velocity = {x: 0, y: 0};
-
-    this.offsetX = this.el.scrollLeft;
-    this.offsetY = this.el.scrollTop;
+    this.setStartPos(e.clientX, e.clientY);
 
     document.onmousemove = delegate(this, this.onMouseMove);
     document.onmouseup = delegate(this,this.onMouseUp);
@@ -61,35 +58,90 @@ inrt.scroller.prototype.onMouseMove = function(e)
     e = window.event;
   }
 
-  var oldX = this.el.scrollLeft;
-  var oldY = this.el.scrollTop;
-
-  var invert = this.invertMovement ? -1 : 1;
-  this.el.scrollLeft = (this.offsetX + invert * (- e.clientX + this.startX));
-  this.el.scrollTop = (this.offsetY + invert * (- e.clientY + this.startY));
-
-  this.velocity = { x: this.el.scrollLeft - oldX, y: this.el.scrollTop - oldY };
+  this.updateScrollPos(e.clientX, e.clientY);
 };
 
 // on mouse up
 inrt.scroller.prototype.onMouseUp = function(e)
 {
-  this.velocity = { x: this.capSpeed(this.velocity.x), y: this.capSpeed(this.velocity.y) };
-
-  if(this.velocity.x != 0 || this.velocity.y != 0)
-  {
-    this.startScroll();
-  }
-
-  this.el.onmousemove = null;
-  document.onselectstart = null;
   document.onmousemove = null;
   document.onmouseup = null;
+
+  this.finish();
+};
+
+// on touch start
+inrt.scroller.prototype.onTouchStart = function(e)
+{
+  e.preventDefault();
+
+  if(e.changedTouches)
+  {
+    var t = e.changedTouches[0];
+
+    this.setStartPos(t.clientX, t.clientY);
+
+    this.tempMove = delegate(this, this.onTouchMove);
+    this.tempEnd = delegate(this, this.onTouchEnd);
+
+    document.addEventListener("touchmove", this.tempMove);
+    document.addEventListener("touchend", this.tempEnd);
+  }
+};
+
+// on touch move
+inrt.scroller.prototype.onTouchMove = function(e)
+{
+  e.preventDefault();
+
+  if(e.changedTouches)
+  {
+    var t = e.changedTouches[0];
+    this.updateScrollPos(t.clientX, t.clientY);
+  }
+};
+
+// on touch end
+inrt.scroller.prototype.onTouchEnd = function(e)
+{
+  e.preventDefault();
+
+  document.removeEventListener("touchmove", this.tempMove);
+  document.removeEventListener("touchend", this.tempEnd);
+
+  this.tempMove = this.tempEnd = null;
+
+  this.finish();
 };
 
 //
 // Implementation
 //
+
+// update scroll pos
+inrt.scroller.prototype.updateScrollPos = function(x, y)
+{
+  var oldX = this.el.scrollLeft;
+  var oldY = this.el.scrollTop;
+
+  var invert = this.invertMovement ? -1 : 1;
+  this.el.scrollLeft = (this.offsetX + invert * (- x + this.startX));
+  this.el.scrollTop = (this.offsetY + invert * (- y + this.startY));
+
+  this.velocity = { x: this.el.scrollLeft - oldX, y: this.el.scrollTop - oldY };
+};
+
+// set start pos
+inrt.scroller.prototype.setStartPos = function(x, y)
+{
+  this.startX = x;
+  this.startY = y;
+
+  this.velocity = {x: 0, y: 0};
+
+  this.offsetX = this.el.scrollLeft;
+  this.offsetY = this.el.scrollTop;
+};
 
 // cap speed
 inrt.scroller.prototype.capSpeed = function(value)
@@ -106,10 +158,15 @@ inrt.scroller.prototype.capSpeed = function(value)
   return value;
 };
 
-// start scroll
-inrt.scroller.prototype.startScroll = function()
+// finish
+inrt.scroller.prototype.finish = function()
 {
-  requestAnimFrame(delegate(this, this.update));
+  this.velocity = { x: this.capSpeed(this.velocity.x), y: this.capSpeed(this.velocity.y) };
+
+  if(this.velocity.x != 0 || this.velocity.y != 0)
+  {
+    requestAnimFrame(delegate(this, this.update));
+  }
 };
 
 // update movement
@@ -126,9 +183,14 @@ inrt.scroller.prototype.update = function()
   this.el.scrollLeft = Math.round(this.el.scrollLeft + this.velocity.x);
   this.el.scrollTop = Math.round(this.el.scrollTop + this.velocity.y);
 
-  if(Math.floor(Math.abs(this.velocity.x)) != 0 || Math.floor(Math.abs(this.velocity.y)) != 0)
+  // stop if hits bounds
+  var maxTopScroll = this.el.scrollHeight - this.el.clientHeight;
+  var maxLeftScroll = this.el.scrollWidth - this.el.clientWidth;
+
+  if((Math.floor(Math.abs(this.velocity.x)) != 0 ||  Math.floor(Math.abs(this.velocity.y)) != 0) && 
+     !((this.el.scrollTop == maxTopScroll) || (this.el.scrollLeft == maxLeftScroll)))
   {
-    this.startScroll();
+    requestAnimFrame(delegate(this, this.update));
   }
 };
 
