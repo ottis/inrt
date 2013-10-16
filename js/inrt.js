@@ -183,12 +183,7 @@ inrt.scroller.prototype.update = function()
   this.el.scrollLeft = Math.round(this.el.scrollLeft + this.velocity.x);
   this.el.scrollTop = Math.round(this.el.scrollTop + this.velocity.y);
 
-  // stop if hits bounds
-  var maxTopScroll = this.el.scrollHeight - this.el.clientHeight;
-  var maxLeftScroll = this.el.scrollWidth - this.el.clientWidth;
-
-  if((Math.floor(Math.abs(this.velocity.x)) != 0 ||  Math.floor(Math.abs(this.velocity.y)) != 0) && 
-     !((this.el.scrollTop == maxTopScroll) || (this.el.scrollLeft == maxLeftScroll)))
+  if(Math.floor(Math.abs(this.velocity.x)) != 0 ||  Math.floor(Math.abs(this.velocity.y)) != 0)
   {
     requestAnimFrame(delegate(this, this.update));
   }
