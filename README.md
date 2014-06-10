@@ -1,6 +1,6 @@
 # inrt.js
 
-inrt.js is a lightweight and simple class that gives you the ability to apply inertial scrolling a container. I wanted to create a inertial wrapper class that didn't require the use of external libraries such as jQuery.
+inrt.js is a lightweight and simple class that gives you the ability to apply inertial scrolling to a container. I wanted to create a inertial wrapper class that didn't require the use of external libraries such as jQuery.
 
 Demo can be found here: http://ottis.github.io/inrt/
 
